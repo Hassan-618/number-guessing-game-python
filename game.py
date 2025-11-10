@@ -6,20 +6,41 @@ to create the code in this file for the Number Guessing Game implementation.
 import random
 
 class NumberGuessingGame:
-    def __init__(self):
+    def __init__(self, difficulty="medium"):
         self.target_number = 0
         self.attempts = 0
-        self.max_attempts = 7
-        self.min_range = 1
-        self.max_range = 100
+        self.difficulty = difficulty
+        self.set_difficulty(difficulty)
+        
+    def set_difficulty(self, difficulty):
+        """Set game difficulty with different ranges and attempts"""
+        difficulties = {
+            "easy": {"min": 1, "max": 50, "attempts": 10},
+            "medium": {"min": 1, "max": 100, "attempts": 7},
+            "hard": {"min": 1, "max": 200, "attempts": 5}
+        }
+        
+        if difficulty in difficulties:
+            self.difficulty = difficulty
+            self.min_range = difficulties[difficulty]["min"]
+            self.max_range = difficulties[difficulty]["max"]
+            self.max_attempts = difficulties[difficulty]["attempts"]
+        else:
+            # Default to medium
+            self.difficulty = "medium"
+            self.min_range = 1
+            self.max_range = 100
+            self.max_attempts = 7
         
     def start_game(self):
         """Initialize a new game"""
         self.target_number = random.randint(self.min_range, self.max_range)
         self.attempts = 0
         print(f"\n🎮 Welcome to the Number Guessing Game!")
+        print(f"🎯 Difficulty: {self.difficulty.upper()}")
+        print(f"📊 Range: {self.min_range} to {self.max_range}")
+        print(f"🎲 Attempts: {self.max_attempts}")
         print(f"I'm thinking of a number between {self.min_range} and {self.max_range}")
-        print(f"You have {self.max_attempts} attempts to guess it!")
         
     def make_guess(self, guess):
         """Process a player's guess and return feedback"""
@@ -40,14 +61,36 @@ class NumberGuessingGame:
         """Get number of remaining attempts"""
         return self.max_attempts - self.attempts
 
-def play_game():
-    """Main game loop with enhanced win/lose conditions"""
-    game = NumberGuessingGame()
-    games_played = 0
-    games_won = 0
+def select_difficulty():
+    """Allow player to select difficulty level"""
+    print("\n🎯 Select Difficulty Level:")
+    print("1. Easy (1-50, 10 attempts)")
+    print("2. Medium (1-100, 7 attempts)")
+    print("3. Hard (1-200, 5 attempts)")
     
+    while True:
+        try:
+            choice = int(input("\nEnter your choice (1-3): "))
+            if choice == 1:
+                return "easy"
+            elif choice == 2:
+                return "medium"
+            elif choice == 3:
+                return "hard"
+            else:
+                print("❌ Please enter 1, 2, or 3")
+        except ValueError:
+            print("❌ Please enter a valid number")
+
+def play_game():
+    """Main game loop with difficulty selection"""
     print("🎯 Number Guessing Game - Enhanced Version")
     print("="*50)
+    
+    difficulty = select_difficulty()
+    game = NumberGuessingGame(difficulty)
+    games_played = 0
+    games_won = 0
     
     while True:
         games_played += 1

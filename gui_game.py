@@ -11,7 +11,7 @@ class NumberGuessingGameGUI:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("Number Guessing Game")
-        self.root.geometry("450x550")
+        self.root.geometry("1080x1080")
         self.root.resizable(False, False)
         
         # Game variables
